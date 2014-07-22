@@ -13,7 +13,7 @@ import org.andengine.opengl.util.GLState;
 import org.andengine.util.Constants;
 import org.andengine.util.adt.color.Color;
 import org.andengine.util.adt.list.SmartList;
-
+import android.annotation.SuppressLint;
 import android.util.SparseArray;
 
 /**
@@ -234,7 +234,8 @@ public class Scene extends Entity {
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
 
-	@Override
+	@SuppressLint("WrongCall")
+    @Override
 	protected void onManagedDraw(final GLState pGLState, final Camera pCamera) {
 		final Scene childScene = this.mChildScene;
 
@@ -354,7 +355,7 @@ public class Scene extends Entity {
 						final ITouchArea touchArea = touchAreas.get(i);
 						if (touchArea.contains(sceneTouchEventX, sceneTouchEventY)) {
 							final Boolean handled = this.onAreaTouchEvent(pSceneTouchEvent, sceneTouchEventX, sceneTouchEventY, touchArea);
-							if (handled != null && handled) {
+							if (!(handled == null || !handled)) {
 								/* If binding of ITouchAreas is enabled and this is an ACTION_DOWN event,
 								 * bind this ITouchArea to the PointerID. */
 								if ((this.mTouchAreaBindingOnActionDownEnabled && isActionDown) || (this.mTouchAreaBindingOnActionMoveEnabled && isActionMove)) {
@@ -369,7 +370,7 @@ public class Scene extends Entity {
 						final ITouchArea touchArea = touchAreas.get(i);
 						if (touchArea.contains(sceneTouchEventX, sceneTouchEventY)) {
 							final Boolean handled = this.onAreaTouchEvent(pSceneTouchEvent, sceneTouchEventX, sceneTouchEventY, touchArea);
-							if (handled != null && handled) {
+							if (!(handled == null || !handled)) {
 								/* If binding of ITouchAreas is enabled and this is an ACTION_DOWN event,
 								 * bind this ITouchArea to the PointerID. */
 								if ((this.mTouchAreaBindingOnActionDownEnabled && isActionDown) || (this.mTouchAreaBindingOnActionMoveEnabled && isActionMove)) {

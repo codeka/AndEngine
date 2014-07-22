@@ -335,7 +335,7 @@ public final class ArrayUtils {
 					if (item.equals(pItem)) {
 						return true;
 					}
-				} else {
+				} else if (pItem != null) {
 					if (pItem.equals(item)) {
 						return true;
 					}

@@ -125,6 +125,8 @@ public class Engine implements SensorEventListener, OnTouchListener, ITouchEvent
 	protected int mSurfaceWidth = 1; // 1 to prevent accidental DIV/0
 	protected int mSurfaceHeight = 1; // 1 to prevent accidental DIV/0
 
+	protected EngineErrorHandler mErrorHandler;
+
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -184,6 +186,10 @@ public class Engine implements SensorEventListener, OnTouchListener, ITouchEvent
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
+
+	public void setErrorHandler(EngineErrorHandler handler) {
+	    mErrorHandler = handler;
+	}
 
 	public synchronized boolean isRunning() {
 		return this.mRunning;
@@ -637,6 +643,12 @@ public class Engine implements SensorEventListener, OnTouchListener, ITouchEvent
 			this.onDrawScene(pGLState, this.mCamera);
 
 			engineLock.notifyCanUpdate();
+		} catch (Exception e) {
+		    if (mErrorHandler != null) {
+		        mErrorHandler.onRenderThreadException(e);
+		    } else {
+		        throw new RuntimeException(e);
+		    }
 		} finally {
 			engineLock.unlock();
 		}
@@ -969,5 +981,9 @@ public class Engine implements SensorEventListener, OnTouchListener, ITouchEvent
 		// ===========================================================
 		// Inner and Anonymous Classes
 		// ===========================================================
+	}
+
+	public interface EngineErrorHandler {
+	    void onRenderThreadException(Exception e);
 	}
 }

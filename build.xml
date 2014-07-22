@@ -48,9 +48,7 @@
             <equals arg1="${ndk}" arg2="true"/>
         </condition>
         <condition property="do.clean-native">
-            <not>
-                <equals arg1="${ndk}" arg2="true"/>
-            </not>
+            <equals arg1="${ndk}" arg2="true"/>
         </condition>
     </target>
 

@@ -151,7 +151,7 @@ public class AStarPathFinder<T> implements IPathFinder<T> {
 		sortedOpenNodes.clear();
 
 		/* Check if a path was found. */
-		if (currentNode.mID != toNodeID) {
+		if (currentNode == null || currentNode.mID != toNodeID) {
 			return null;
 		}
 

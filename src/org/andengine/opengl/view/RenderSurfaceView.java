@@ -63,6 +63,10 @@ public class RenderSurfaceView extends GLSurfaceView implements IResolutionPolic
 	 */
 	@Override
 	protected void onMeasure(final int pWidthMeasureSpec, final int pHeightMeasureSpec) {
+	    if (isInEditMode()) {
+	        super.onMeasure(pWidthMeasureSpec, pHeightMeasureSpec);
+	        return;
+	    }
 		this.mEngineRenderer.mEngine.getEngineOptions().getResolutionPolicy().onMeasure(this, pWidthMeasureSpec, pHeightMeasureSpec);
 	}
 
