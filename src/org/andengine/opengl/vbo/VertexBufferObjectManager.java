@@ -1,6 +1,7 @@
 package org.andengine.opengl.vbo;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import org.andengine.opengl.util.GLState;
 
@@ -20,7 +21,7 @@ public class VertexBufferObjectManager {
 	// Fields
 	// ===========================================================
 
-	private final ArrayList<IVertexBufferObject> mVertexBufferObjectsLoaded = new ArrayList<IVertexBufferObject>();
+	private final HashSet<IVertexBufferObject> mVertexBufferObjectsLoaded = new HashSet<IVertexBufferObject>();
 
 	private final ArrayList<IVertexBufferObject> mVertexBufferObjectsToBeUnloaded = new ArrayList<IVertexBufferObject>();
 
@@ -34,27 +35,24 @@ public class VertexBufferObjectManager {
 
 	public synchronized int getHeapMemoryByteSize() {
 		int byteSize = 0;
-		final ArrayList<IVertexBufferObject> vertexBufferObjectsLoaded = this.mVertexBufferObjectsLoaded;
-		for (int i = vertexBufferObjectsLoaded.size() - 1; i >= 0; i--) {
-			byteSize += vertexBufferObjectsLoaded.get(i).getHeapMemoryByteSize();
+		for (IVertexBufferObject vbo : mVertexBufferObjectsLoaded) {
+			byteSize += vbo.getHeapMemoryByteSize();
 		}
 		return byteSize;
 	}
 
 	public synchronized int getNativeHeapMemoryByteSize() {
 		int byteSize = 0;
-		final ArrayList<IVertexBufferObject> vertexBufferObjectsLoaded = this.mVertexBufferObjectsLoaded;
-		for (int i = vertexBufferObjectsLoaded.size() - 1; i >= 0; i--) {
-			byteSize += vertexBufferObjectsLoaded.get(i).getNativeHeapMemoryByteSize();
+		for (IVertexBufferObject vbo : mVertexBufferObjectsLoaded) {
+			byteSize += vbo.getNativeHeapMemoryByteSize();
 		}
 		return byteSize;
 	}
 
 	public synchronized int getGPUHeapMemoryByteSize() {
 		int byteSize = 0;
-		final ArrayList<IVertexBufferObject> vertexBufferObjectsLoaded = this.mVertexBufferObjectsLoaded;
-		for (int i = vertexBufferObjectsLoaded.size() - 1; i >= 0; i--) {
-			byteSize += vertexBufferObjectsLoaded.get(i).getGPUMemoryByteSize();
+		for (IVertexBufferObject vbo : mVertexBufferObjectsLoaded) {
+			byteSize += vbo.getGPUMemoryByteSize();
 		}
 		return byteSize;
 	}
@@ -72,12 +70,11 @@ public class VertexBufferObjectManager {
 	}
 
 	public synchronized void onDestroy() {
-		final ArrayList<IVertexBufferObject> vertexBufferObjectsLoaded = this.mVertexBufferObjectsLoaded;
-		for (int i = vertexBufferObjectsLoaded.size() - 1; i >= 0; i--) {
-			vertexBufferObjectsLoaded.get(i).setNotLoadedToHardware();
+		for (IVertexBufferObject vbo : mVertexBufferObjectsLoaded) {
+			vbo.setNotLoadedToHardware();
 		}
 
-		vertexBufferObjectsLoaded.clear();
+		mVertexBufferObjectsLoaded.clear();
 	}
 
 	public synchronized void onVertexBufferObjectLoaded(final IVertexBufferObject pVertexBufferObject) {
@@ -91,26 +88,22 @@ public class VertexBufferObjectManager {
 	}
 
 	public synchronized void onReload() {
-		final ArrayList<IVertexBufferObject> vertexBufferObjectsLoaded = this.mVertexBufferObjectsLoaded;
-		for (int i = vertexBufferObjectsLoaded.size() - 1; i >= 0; i--) {
-			vertexBufferObjectsLoaded.get(i).setNotLoadedToHardware();
+		for (IVertexBufferObject vbo : mVertexBufferObjectsLoaded) {
+			vbo.setNotLoadedToHardware();
 		}
 
-		vertexBufferObjectsLoaded.clear();
+		mVertexBufferObjectsLoaded.clear();
 	}
 
 	public synchronized void updateVertexBufferObjects(final GLState pGLState) {
-		final ArrayList<IVertexBufferObject> vertexBufferObjectsLoaded = this.mVertexBufferObjectsLoaded;
-		final ArrayList<IVertexBufferObject> vertexBufferObjectsToBeUnloaded = this.mVertexBufferObjectsToBeUnloaded;
-
 		/* Unload pending VertexBufferObjects. */
-		for (int i = vertexBufferObjectsToBeUnloaded.size() - 1; i >= 0; i--) {
-			final IVertexBufferObject vertexBufferObjectToBeUnloaded = vertexBufferObjectsToBeUnloaded.remove(i);
-			if (vertexBufferObjectToBeUnloaded.isLoadedToHardware()) {
-				vertexBufferObjectToBeUnloaded.unloadFromHardware(pGLState);
+		for (IVertexBufferObject vbo : mVertexBufferObjectsToBeUnloaded) {
+			if (vbo.isLoadedToHardware()) {
+			  vbo.unloadFromHardware(pGLState);
 			}
-			vertexBufferObjectsLoaded.remove(vertexBufferObjectToBeUnloaded);
+			mVertexBufferObjectsLoaded.remove(vbo);
 		}
+		mVertexBufferObjectsToBeUnloaded.clear();
 	}
 
 	// ===========================================================
