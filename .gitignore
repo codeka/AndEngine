@@ -21,6 +21,7 @@ doc/**
 gen/**
 gdb.setup
 gdbserver
+app/build
 
 # Eclipse:
 .settings

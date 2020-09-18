@@ -4,8 +4,10 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
 
+    useLibrary  'org.apache.http.legacy'
+
     defaultConfig {
-        targetSdkVersion 28
+        targetSdkVersion 29
 
         ndk {
             moduleName "andengine_shared"
@@ -21,5 +23,5 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:18.0.0'
+    compile 'androidx.legacy:legacy-support-v4:1.0.0'
 }
