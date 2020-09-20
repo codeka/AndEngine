@@ -1,6 +1,9 @@
+
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+
 #include "BufferUtils.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 // ===========================================================
 // org.andengine.opengl.util.BufferUtils

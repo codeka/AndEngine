@@ -10,7 +10,13 @@ android {
         targetSdkVersion 29
 
         ndk {
-            moduleName "andengine_shared"
+            moduleName "andengine"
+        }
+    }
+
+    externalNativeBuild {
+        ndkBuild {
+            path "src/main/jni/Android.mk"
         }
     }
 
@@ -20,6 +26,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+    ndkVersion '21.0.6113669'
 }
 
 dependencies {

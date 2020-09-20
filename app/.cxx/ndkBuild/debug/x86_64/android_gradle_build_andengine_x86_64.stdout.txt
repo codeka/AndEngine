@@ -1,0 +1,3 @@
+[x86_64] Compile++      : andengine <= GLES20Fix.cpp
+[x86_64] Compile++      : andengine <= BufferUtils.cpp
+[x86_64] SharedLibrary  : libandengine.so
