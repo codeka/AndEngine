@@ -22,6 +22,7 @@ gen/**
 gdb.setup
 gdbserver
 app/build
+app/.cxx
 
 # Eclipse:
 .settings
